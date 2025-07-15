@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_event_reminder_template" model="mail.template">
+            <field name="name">Event Reminder Email</field>
+            <field name="model_id" ref="school_management.model_events_club"/>
+            <field name="subject">Reminder: {{ object.name }}</field>
+            <field name="email_from">noreply@yourdomain.com</field>
+                <field name="body_html" type="html">
+                    <p>Hello,</p>
+                    <p>This is a reminder for the event <strong><t t-esc="object.name"/></strong> happening on <t t-esc="object.start_date"/></p>
+               </field>
+        </record>
+    </data>
+</odoo>
+
+
+

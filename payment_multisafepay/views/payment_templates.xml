@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="payment_form_multisafepay" name="MultiSafepay Redirect Form">
+        <form id="o_payment_form" t-att-action="api_url" method="post">
+            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+        </form>
+    </template>
+</odoo>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_customer_org_chart" model="ir.ui.view">
+        <field name="name">res.partner.org.chart</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <hierarchy child_field="customer_child_ids" draggable="0" icon="fa-users">
+                <field name="name"/>
+                <field name="function"/>
+                <templates>
+                        <t t-name="hierarchy-box">
+                            <div t-attf-class="o_hierarchy_node_header d-flex justify-content-center pb-4">
+                                <field name="image_128" preview_image="image_128" options="{'zoom': true, 'zoom_delay': 100}" widget="background_image" />
+                            </div>
+                        <div class="o_hierarchy_node_body d-flex flex-column text-center">
+                            <div class="fw-bold">
+                                <field name="name"/>
+                            </div>
+                            <small>
+                                <field name="function"/>
+                            </small>
+                        </div>
+                    </t>
+                </templates>
+            </hierarchy>
+        </field>
+    </record>
+
+    <record id="action_customer_org_chart" model="ir.actions.act_window">
+        <field name="name">Customer Org Chart</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">hierarchy</field>
+        <field name="view_id" ref="view_customer_org_chart"/>
+        <field name="domain">[ '|', '|', ('customer_parent_id', '=', False), ('customer_child_ids', '=', False), ('customer_parent_id', '!=', False) ]</field>
+        <field name="context">{'search_default_parent_customers': 1}</field>
+
+    </record>
+
+    <menuitem id="menu_customer_org_chart"
+              name="Customer Org Chart"
+              parent="account.menu_finance_receivables"
+              action="action_customer_org_chart"
+              sequence="20"/>
+</odoo>

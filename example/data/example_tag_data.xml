@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="example_tag_abc" model="example.tags">
+        <field name="name">abc</field>
+    </record>
+    <record id="example_tag_bcd" model="example.tags">
+        <field name="name">bcd</field>
+    </record>
+</odoo>

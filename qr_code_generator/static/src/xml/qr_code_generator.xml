@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+  <t t-name="systray_qr_dropdown" owl="1">
+    <div t-ref="root" class="o_systray_wrapper">
+      <div class="o_systray_item dropdown ">
+        <div class="o_systray_icon" title="QR Generator" t-on-click="toggleDropdown">
+          <i class="fa fa-qrcode"
+             style="color: white; margin-bottom:10px; padding:13px; font-size: 20px"/>
+        </div>
+
+        <div class="dropdown-menu dropdown-menu-end show"
+             t-if="state.dropdownOpen"
+             style="min-width: 250px; top: 46px; right: 0; z-index: 1000;">
+          <div t-ref="hiddenQR" style="display: none;"></div>
+          <div class="p-2">
+            <input type="text"
+                   t-model="state.text"
+                   class="form-control mb-2"
+                   placeholder="Enter text for QR"/>
+            <button t-on-click="generateQR"
+                    class="btn btn-primary btn-sm mb-1 w-50">
+              Generate
+            </button>
+            <button t-on-click="resetQR"
+                  class="btn btn-secondary btn-sm mb-1 w-50">
+              Reset
+            </button>
+            <div t-if="state.qrDataUrl" class="text-center">
+              <a t-att-href="state.qrDataUrl" t-att-download="'qr_code.png'" title="Click to download">
+                <img t-att-src="state.qrDataUrl" class="img-fluid cursor-pointer"/>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </t>
+</odoo>
+

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <record id="menu_school_management_registration" model="website.menu">
+      <field name="name">Student Registration</field>
+      <field name="url">/school_management/register</field>
+      <field name="parent_id" ref="website.main_menu"/>
+      <field name="sequence" eval="11"/>
+    </record>
+
+    <record id="menu_school_management_leave" model="website.menu">
+      <field name="name">Leaves</field>
+      <field name="url">/school_management/leave</field>
+      <field name="parent_id" ref="website.main_menu"/>
+      <field name="sequence" eval="12"/>
+    </record>
+
+    <record id="menu_school_management_events" model="website.menu">
+      <field name="name">Events</field>
+      <field name="url">/school_management/events</field>
+      <field name="parent_id" ref="website.main_menu"/>
+      <field name="sequence" eval="13"/>
+    </record>
+  </data>
+</odoo>

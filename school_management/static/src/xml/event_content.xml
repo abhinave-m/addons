@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="school_management.events_data">
+        <section class="latest_events_section py-5">
+                <div t-att-id="carousel_id" class="carousel slide carousel-dark">
+                <div class="carousel-inner">
+                    <div class="container">
+                             <h3 class="section_heading mb-4">Latest Events</h3>
+                        <t t-foreach="chunked_events" t-as="chunk" t-key="chunk_index">
+                            <t t-if="chunk_index == 0">
+                                <div class="carousel-item active">
+                                    <div class="row">
+                                        <t t-foreach="chunk" t-as="event" t-key="event.id">
+                                            <div class="col-md-3">
+                                                <div class="card mb-4 shadow-lg">
+                                                    <t t-if="event.image_url">
+                                                        <img t-att-src="event.image_url"
+                                                             class="card-img-top"
+                                                             style="height: 200px; object-fit: cover;"
+                                                             t-att-alt="event.name"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <img src="/school_management/static/src/img/default_poster.jpg"
+                                                             class="card-img-top"
+                                                             style="height: 200px; object-fit: cover;"
+                                                             alt="Default Image"/>
+                                                    </t>
+                                                    <div class="card-body">
+                                                        <h5 class="card-title" t-esc="event.name"/>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <a t-att-href="'/event/details/' + event.id"
+                                                           class="btn btn-primary mt-2">
+                                                            View Details
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+                            </t>
+                            <t t-if="chunk_index != 0">
+                                <div class="carousel-item">
+                                    <div class="row">
+                                        <t t-foreach="chunk" t-as="event" t-key="event.id">
+                                            <div class="col-md-3">
+                                                <div class="card mb-4 shadow-lg">
+                                                    <t t-if="event.image_url">
+                                                        <img t-att-src="event.image_url"
+                                                             class="card-img-top"
+                                                             style="height: 200px; object-fit: cover;"
+                                                             t-att-alt="event.name"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <img src="/school_management/static/src/img/default_poster.jpg"
+                                                             class="card-img-top"
+                                                             style="height: 200px; object-fit: cover;"
+                                                             alt="Default Image"/>
+                                                    </t>
+                                                    <div class="card-body">
+                                                        <h5 class="card-title" t-esc="event.name"/>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <a t-att-href="'/event/details/' + event.id"
+                                                           class="btn btn-primary mt-2">
+                                                            View Details
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+                            </t>
+                        </t>
+                    </div>
+                    <button class="carousel-control-prev" type="button" t-att-data-bs-target="'#' + carousel_id" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" t-att-data-bs-target="'#' + carousel_id" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </t>
+</templates>
+

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="customer_org_chart.CustomerOrgChart">
+        <div class="o_customer_org_chart">
+            <t t-if="state.root">
+                <t t-call="customer_org_chart.CustomerOrgChartNode">
+                    <t t-set="node" t-value="state.root"/>
+                    <t t-set="is_root" t-value="true"/>
+                </t>
+            </t>
+            <t t-else="">
+                <div class="alert alert-info" role="alert">
+                    <p><b>No hierarchy available.</b></p>
+                    <p>This customer has no parent or child set.</p>
+                </div>
+            </t>
+        </div>
+    </t>
+
+    <t t-name="customer_org_chart.CustomerOrgChartNode">
+        <div t-if="is_root" class="o_org_chart_node o_root_node">
+            <t t-call="customer_org_chart.CustomerOrgChartCard"/>
+            <div t-if="node.children.length" class="o_org_chart_children">
+                <t t-foreach="node.children" t-as="child" t-key="child.id">
+                    <t t-call="customer_org_chart.CustomerOrgChartNode">
+                        <t t-set="node" t-value="child"/>
+                        <t t-set="is_root" t-value="false"/>
+                    </t>
+                </t>
+            </div>
+        </div>
+        <div t-else="" class="o_org_chart_node o_treeEntry">
+            <t t-call="customer_org_chart.CustomerOrgChartCard"/>
+            <div t-if="node.children.length" class="o_org_chart_children">
+                <t t-foreach="node.children" t-as="child" t-key="child.id">
+                    <t t-call="customer_org_chart.CustomerOrgChartNode">
+                        <t t-set="node" t-value="child"/>
+                        <t t-set="is_root" t-value="false"/>
+                    </t>
+                </t>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="customer_org_chart.CustomerOrgChartCard">
+        <div class="o_org_chart_card" t-on-click="() => this.openForm(node)" style="cursor:pointer; display: flex; flex-direction: row; align-items: center; margin-bottom: var(--treeEntry-padding-v);">
+            <div class="o_media_object"
+                 t-att-style="'background-image:url(\'data:image/png;base64,' + node.image_128 + '\')'" />
+            <div class="o_org_chart_info">
+                <div class="o_org_chart_name" t-esc="node.display_name"/>
+                <div t-if="node.function" class="o_org_chart_role" t-esc="node.function"/>
+            </div>
+        </div>
+    </t>
+</templates>

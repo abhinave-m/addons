@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem name="School Management"
+              id="school_management_menu_root"
+              sequence="1"
+              web_icon ="school_management,school_management/static/description/icon.png"/>
+
+    <menuitem name="Student"
+              id="school_management_menu_student_main"
+              sequence="1"
+              parent="school_management_menu_root"/>
+
+    <menuitem name="Registration"
+              id="student_registration_menu"
+              sequence="10"
+              parent="school_management_menu_student_main"
+              action="action_registration"/>
+
+    <menuitem name="Student"
+              id="student_menu"
+              sequence="10"
+              parent="school_management_menu_student_main"
+              action="action_student"/>
+
+    <menuitem name="Employee"
+              id="employee_menu"
+              sequence="2"
+              parent="school_management_menu_root"
+              groups="school_management.group_school_management_office_staffs"/>
+
+    <menuitem name="Teacher"
+              id="teacher_menu"
+              sequence="1"
+              parent="employee_menu"
+              action="action_teacher"/>
+
+    <menuitem name="Office Staff"
+              id="office_staff_menu"
+              sequence="2"
+              parent="employee_menu"
+              action="action_office_staff"/>
+
+    <menuitem name="Exam"
+              id="exam_menu"
+              sequence="3"
+              parent="school_management_menu_root"
+              action="action_exam"/>
+
+    <menuitem name="Leave"
+              id="leave_menu"
+              sequence="10"
+              parent="school_management_menu_root"
+              action="action_leave"/>
+
+    <menuitem name="Club"
+              id="school_management_menu_clubs_main"
+              sequence="4"
+              parent="school_management_menu_root"
+              groups="school_management.group_school_management_office_staffs"
+              action="action_clubs"/>
+
+    <menuitem name="Events"
+              id="events_club_menu"
+              sequence="5"
+              parent="school_management_menu_root"
+              action="action_events_club"/>
+
+    <menuitem name="Reporting"
+              id="school_management_reporting_menu"
+              sequence="10"
+              parent="school_management_menu_root"
+              groups="school_management.group_school_management_office_staffs"/>
+
+    <menuitem name="Leave information"
+              id="leave_information_menu"
+              sequence="10"
+              parent="school_management_reporting_menu"
+              action="action_leave_report_wizard"/>
+
+    <menuitem name="Event details"
+              id="event_details_menu"
+              sequence="10"
+              parent="school_management_reporting_menu"
+              action="action_event_report_wizard"/>
+
+    <menuitem name="Club data"
+              id="club_data_menu"
+              sequence="10"
+              parent="school_management_reporting_menu"
+              action="action_clubs_report_wizard"/>
+
+    <menuitem name="Student information"
+              id="student_information_menu"
+              sequence="10"
+              parent="school_management_reporting_menu"
+              action="action_student_report_wizard"/>
+
+    <menuitem name=" Exam details"
+              id="exam_details_menu"
+              sequence="10"
+              parent="school_management_reporting_menu"
+              action="action_exam_report_wizard"/>
+
+    <menuitem name="Class"
+              id="class_menu"
+              sequence="20"
+              parent="school_management_menu_root"
+              groups="school_management.group_school_management_students"
+              action="action_student_class"/>
+
+    <menuitem name="Configuration"
+              id="school_management_menu_main"
+              sequence="20"
+              parent="school_management_menu_root"/>
+
+    <menuitem name="Manage Department"
+              id="manage_department_menu"
+              sequence="20"
+              parent="school_management_menu_main"
+              groups="school_management.group_school_management_office_staffs"
+              action="action_manage_department"/>
+
+    <menuitem name="Manage Class"
+              id="manage_class_menu"
+              sequence="20"
+              parent="school_management_menu_main"
+              groups="school_management.group_school_management_office_staffs"
+              action="action_manage_class"/>
+
+    <menuitem name="Manage Subject"
+              id="manage_subject_menu"
+              sequence="10"
+              parent="school_management_menu_main"
+              action="action_manage_subject"/>
+
+    <menuitem name="Manage Academic Year"
+              id="manage_academic_year_menu"
+              sequence="10"
+              parent="school_management_menu_main"
+              action="action_manage_academic_year"/>
+</odoo>

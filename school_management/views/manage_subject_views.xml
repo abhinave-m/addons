@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_manage_subject_list" model="ir.ui.view">
+        <field name="name">manage_subject_list</field>
+        <field name="model">manage.subject</field>
+        <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="department_id"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_manage_subject_form" model="ir.ui.view">
+        <field name="name">manage_subject_form</field>
+        <field name="model">manage.subject</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="department_id"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+     <record id="action_manage_subject" model="ir.actions.act_window">
+            <field name="name">Manage Subjects</field>
+            <field name="res_model">manage.subject</field>
+            <field name="view_mode">list,form</field>
+    </record>
+</odoo>

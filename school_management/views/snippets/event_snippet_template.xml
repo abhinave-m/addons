@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="latest_events" name="Latest Events">
+        <section class="latest_events_section">
+            <div class="container">
+                <div class="alert alert-info">
+                    <h4>Your Latest Events snippet will be displayed here...
+                        Please save to view the snippet
+                    </h4>
+                </div>
+            </div>
+        </section>
+    </template>
+    <template id="latest_events_snippet" inherit_id="website.snippets" name="Latest Events Snippet">
+        <xpath expr="//snippets[@id='snippet_groups']" position="inside">
+            <t t-snippet="school_management.latest_events"/>
+        </xpath>
+    </template>
+    <template id="event_details_template" name="Event Template">
+        <t t-call="website.layout">
+            <div class="container">
+                <div class="row">
+                <h3 class="section_heading mb-4">Event details</h3>
+                <div class="col-md-5">
+                                <t t-if="event.event_image">
+                                    <img t-att-src="'/web/image/events.club/' + str(event.id) + '/event_image'"
+                                         class="card-img-top"
+                                         style="height: auto; object-fit: cover;"
+                                         t-att-alt="event.name"/>
+                                </t>
+                                <t t-else="">
+                                    <img src="/school_management/static/src/img/default_poster.jpg" class="card-img-top"
+                                        style="height: auto; object-fit: cover;"
+                                        alt="Default Image"/>
+                                </t>
+                    </div>
+                <div class="col-md-7">
+                    <h2><t t-esc="event.name"/></h2>
+                    <p><t t-esc="event.desc"/></p>
+                    <p><strong>Club Name:</strong><t t-esc="event.club_id.name"/></p>
+                    <p><strong>Start Date:</strong><t t-esc="event.start_date"/></p>
+                    <p><strong>End Date:</strong><t t-esc="event.end_date"/></p>
+                    <a href="/" class="btn btn-primary">Go Back</a>
+                </div>
+            </div>
+            </div>
+        </t>
+    </template>
+</odoo>

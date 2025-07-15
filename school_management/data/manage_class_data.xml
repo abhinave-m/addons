@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="class_grade1" model="manage.class">
+            <field name="name">Grade 1</field>
+            <field name="department_id" ref="school_management.department_lp"/>
+        </record>
+
+        <record id="class_grade5" model="manage.class">
+            <field name="name">Grade 5</field>
+            <field name="department_id" ref="school_management.department_up"/>
+        </record>
+
+        <record id="class_grade8" model="manage.class">
+            <field name="name">Grade 8</field>
+            <field name="department_id" ref="school_management.department_hs"/>
+        </record>
+    </data>
+</odoo>

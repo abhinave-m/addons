@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="grade_field_pos.ProductCard" t-inherit="point_of_sale.ProductCard" t-inherit-mode="extension">
+        <xpath expr="//article" position="inside">
+            <div t-if="this.props.product.product_grade" class="inline position-absolute p-2">
+                <span class="badge text-bg-primary">
+                    Grade: <t t-out="this.props.product.product_grade"/>
+                </span>
+            </div>
+        </xpath>
+    </t>
+</templates>

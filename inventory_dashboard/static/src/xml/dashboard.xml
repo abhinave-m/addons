@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="inventory_dashboard.InventoryDashboard" owl="1">
+        <style>
+        .dashboard-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s ease;
+            background: white;
+            min-height: 750px;
+            max-height: 750px;
+            overflow: hidden;
+        }
+        </style>
+        <div class="oh_dashboards" t-ref="root" style="height:100%; overflow-y: scroll; overflow-x: hidden;">
+            <h1 style="text-align:center; margin-bottom:20px;">Inventory Dashboard</h1>
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
+                <select t-att-value="this.globalFilter" t-on-change="(ev) => this.onGlobalFilterChange(ev)" class="date_filter_values o_input me-3 text-truncate" style="width: 100px ; min-width: 150px; border-radius: 0.5rem; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+                    <option value=""></option>
+                    <option value="yearly">This Year</option>
+                    <option value="monthly">This Month</option>
+                    <option value="weekly">This Week</option>
+                </select>
+            </div>
+            <div class="tiles">
+                <div class="container-fluid py-5">
+                    <div class="row">
+
+                        <!-- Incoming Stock -->
+                        <div class="col-md-6 my-4">
+                            <div class="dashboard-card" style="padding: 20px;">
+                                <h2 style="text-align:center; margin-bottom:20px; position:relative;">Incoming Stock</h2>
+                                    <select t-att-value="this.filters.incoming" t-on-change="(ev) => this.onFilterChange('incoming', ev)" class="date_filter_values o_input me-3 text-truncate" style="width: auto;top: 10px; right: 10px;">
+                                        <option value="yearly">This Year</option>
+                                        <option value="monthly">This Month</option>
+                                        <option value="weekly">This Week</option>
+                                    </select>
+                                <canvas id="incomingChart" height="200"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Outgoing Stock -->
+                        <div class="col-md-6 my-4">
+                            <div class="dashboard-card" style="padding: 20px;">
+                                <h2 style="text-align:center; margin-bottom:20px; position:relative;">Outgoing Stock</h2>
+                                <select t-att-value="this.filters.outgoing" t-on-change="(ev) => this.onFilterChange('outgoing', ev)" class="date_filter_values o_input me-3 text-truncate" style="width: auto;top: 10px; right: 10px;">
+                                    <option value="yearly">This Year</option>
+                                    <option value="monthly">This Month</option>
+                                    <option value="weekly">This Week</option>
+                                </select>
+                                <canvas id="outgoingChart" height="200"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Internal Moves -->
+                        <div class="col-md-6 my-4">
+                            <div class="dashboard-card dashboard-card--border-top dashboard-card--border-top-warning" style="padding: 20px;">
+                                <h2 style="text-align:center; margin-bottom:20px; position:relative;">Internal Stock Move</h2>
+                                <select t-att-value="this.filters.internal" t-on-change="(ev) => this.onFilterChange('internal', ev)" class="date_filter_values o_input me-3 text-truncate"  style="width: auto;top: 10px; right: 10px;">
+                                    <option value="yearly">This Year</option>
+                                    <option value="monthly">This Month</option>
+                                    <option value="weekly">This Week</option>
+                                </select>
+                                <canvas id="internalChart" height="200"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Location Wise Stock -->
+                        <div class="col-md-6 my-4">
+                            <div class="dashboard-card dashboard-card--border-top dashboard-card--border-top-success" style="padding: 20px;">
+                                <h2 style="text-align:center; margin-bottom:20px;">Location Wise Stock</h2>
+                                <canvas id="locationChart" height="200"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Group  -->
+                        <div class="col-md-6 my-4">
+                            <div class="dashboard-card dashboard-card--border-top dashboard-card--border-top-success" style="padding: 20px;">
+                                <h2 style="text-align:center; margin-bottom:20px;">Group Based on Picking Type</h2>
+                                <div style="display:flex; justify-content:center; align-items:center; height:450px;">
+                                    <canvas id="groupChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Warehouse Locations -->
+                        <div class="col-md-6 my-4">
+                            <div class="dashboard-card dashboard-card--border-top dashboard-card--border-top-success" style="padding: 20px;">
+                                <h2 style="text-align:center; margin-bottom:20px;">Warehouse Locations</h2>
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Warehouse</th>
+                                            <th>Location</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="state.warehouseStock" t-as="item" t-key="item.location">
+                                            <tr>
+                                                <td><t t-esc="item.warehouse"/></td>
+                                                <td><t t-esc="item.location"/></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Average Expense  -->
+                        <div class="col-md-6 my-4">
+                            <div class="dashboard-card dashboard-card--border-top dashboard-card--border-top-success" style="padding: 20px;">
+                                <h2 style="text-align:center; margin-bottom:20px;">Average Expense</h2>
+                                <div style="display:flex; justify-content:center; align-items:center; height:600px;">
+                                    <canvas id="expenseChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Inventory Valuation  -->
+                        <div class="col-md-6 my-4">
+                            <div class="dashboard-card dashboard-card--border-top dashboard-card--border-top-success" style="padding: 20px;">
+                                <h2 style="text-align:center; margin-bottom:20px;">Inventory Valuation</h2>
+                                <div style="display:flex; justify-content:center; align-items:center; height:500px;">
+                                    <canvas id="valuationChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

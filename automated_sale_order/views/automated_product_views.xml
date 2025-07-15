@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="product_product_form_inherit_automated_product" model="ir.ui.view">
+        <field name="name">product.product.form.inherit.automated.product</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/header" position="inside">
+                <button name="add_to_quotation" type="object" string="Add To Quotation" class="btn-primary"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

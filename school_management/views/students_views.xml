@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_registration_list_students" model="ir.ui.view">
+        <field name="name">registration.list.students</field>
+        <field name="model">registration</field>
+        <field name="inherit_id" ref="school_management.view_registration_list"/>
+        <field name="priority" eval="20"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+                <xpath expr="//field[@name='status']" position="after">
+                <field name="attendance"
+                       widget="badge"
+                       decoration-success="attendance == 'present'"
+                       decoration-danger="attendance == 'absent'"/>
+                </xpath>
+        </field>
+    </record>
+    <record id="view_registration_form_students" model="ir.ui.view">
+        <field name="name">registration.form.students</field>
+        <field name="model">registration</field>
+        <field name="inherit_id" ref="school_management.view_registration_form"/>
+        <field name="priority" eval="20"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="user_id" invisible="0"/>
+            </xpath>
+            <xpath expr="//field[@name='school_id']" position="after">
+                <field name="attendance"/>
+            </xpath>
+            <xpath expr="//field[@name='registration_number']" position="replace">
+                <field name="admission_number" readonly="1" nolabel="1" style="font-size:50px"/>
+            </xpath>
+            <xpath expr="//field[@name='registration_date']" position="after">
+                <field name="registration_number"/>
+            </xpath>
+
+            <button name="enrol" position="attributes">
+                    <attribute name="invisible">1</attribute>
+            </button>
+            <button name="action_draft" position="attributes">
+                    <attribute name="invisible">1</attribute>
+            </button>
+            <field name="status" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+        </field>
+        </record>
+
+        <record id="action_student" model="ir.actions.act_window">
+        <field name="name">Students</field>
+        <field name="res_model">registration</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('status','=','enroled')]</field>
+        <field name="context">{'list_view_ref': 'school_management.view_registration_list_students', 'form_view_ref': 'school_management.view_registration_form_students', 'create': False}</field>
+    </record>
+</odoo>
+
+
+

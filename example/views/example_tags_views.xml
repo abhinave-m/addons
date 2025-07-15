@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_example_tags_list" model="ir.ui.view">
+        <field name="name">example_tags_list</field>
+        <field name="model">example.tags</field>
+        <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+                <field name="color" widget="color_picker"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_example_tags" model="ir.actions.act_window">
+        <field name="name">Example Tags</field>
+        <field name="res_model">example.tags</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="res_partner_search_filter" model="ir.ui.view">
+        <field name="name">res.partner.search.filter</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='group_by']" position="before">
+                <filter string="Parent Customers" name="parent_customers" domain="[('customer_child_ids', '!=', False)]"/>
+                <filter string="Child Customers" name="child_customers" domain="[('customer_parent_id', '!=', False)]"/>
+                <filter string="Top-Level Customers" name="top_level_customers" domain="[('customer_parent_id','=',False)]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

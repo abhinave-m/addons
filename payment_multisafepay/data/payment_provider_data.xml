@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+        <record id="payment_method_multisafepay" model="payment.method">
+            <field name="name">MultiSafepay</field>
+            <field name="code">multisafepay_gateway</field>
+            <field name="sequence">1</field>
+            <field name="image" type="base64" file="payment_multisafepay/static/description/multi.png"/>
+            <field name="active">True</field>
+            <field name="support_tokenization">False</field>
+            <field name="support_express_checkout">False</field>
+            <field name="support_refund">none</field>
+        </record>
+        <record id="payment_provider_multisafepay" model="payment.provider">
+            <field name="name">MultiSafepay</field>
+            <field name="sequence">10</field>
+            <field name="image_128" type="base64" file="payment_multisafepay/static/description/multi.png"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="state">test</field>
+            <field name="support_refund">none</field>
+            <field name="support_tokenization">False</field>
+            <field name="allow_tokenization">False</field>
+            <field name="is_published">True</field>
+            <field name="code">multisafepay</field>
+            <field name="redirect_form_view_id" ref="payment_multisafepay.payment_form_multisafepay"/>
+            <field name="multisafepay_api_key">4cc0d64e201b82cd6523bdc76595a83df1a9c23c</field>
+            <field name="payment_method_ids" eval="[Command.set([ref('payment_method_multisafepay')])]"/>
+        </record>
+        <record id="account_payment_method_multisafepay" model="account.payment.method">
+            <field name="name">MultiSafepay</field>
+            <field name="code">multisafepay</field>
+            <field name="payment_type">inbound</field>
+        </record>
+
+</odoo>
+

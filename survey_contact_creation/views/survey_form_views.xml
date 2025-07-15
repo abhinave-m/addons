@@ -1,0 +1,19 @@
+<odoo>
+    <record id="view_survey_form_contact_relation" model="ir.ui.view">
+        <field name="name">survey.survey.form.contact.relation</field>
+        <field name="model">survey.survey</field>
+        <field name="inherit_id" ref="survey.survey_survey_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Contact Relation">
+                    <field name="contact_mapping_ids">
+                        <list editable="bottom">
+                            <field name="question_id"/>
+                            <field name="contact_field"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

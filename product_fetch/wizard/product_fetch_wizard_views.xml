@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+  <record id="view_product_fetch_wizard_form" model="ir.ui.view">
+    <field name="name">product.fetch.wizard.form</field>
+    <field name="model">product.fetch.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Fetch Products from Odoo 17" class="oe_form_box">
+        <group string="Odoo 18 Context">
+          <field name="odoo18_db"/>
+          <field name="odoo18_user"/>
+        </group>
+
+        <group string="Odoo 17 Context">
+          <field name="odoo17_url"/>
+          <field name="odoo17_db"/>
+          <field name="odoo17_username"/>
+          <field name="api_key" password="True"/>
+        </group>
+
+        <footer>
+          <button name="action_fetch_all_products" string="Fetch" type="object" class="btn-primary"/>
+          <button string="Close" special="cancel" class="btn-secondary"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+</odoo>

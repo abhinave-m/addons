@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<template id="leave_report">
+  <t t-call="web.html_container">
+    <t t-call="web.external_layout">
+      <h2>Leave Report</h2>
+
+      <p>
+        <strong>Printed Date:</strong>
+        <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
+      </p>
+      <t t-if="class_id">
+        <p><strong>Class:</strong> <span t-esc="env['manage.class'].browse(class_id).name"/></p>
+      </t>
+      <t t-if="student_ids and len(student_ids)==1">
+        <p><strong>Student:</strong> <span t-esc="env['registration'].browse(student_ids[0]).first_name"/></p>
+      </t>
+
+      <t t-if="start_date">
+         <p><strong>Start Date:</strong> <span t-esc="start_date"/></p>
+         <p><strong>End Date:</strong> <span t-esc="end_date"/></p>
+      </t>
+      <div style="margin-top: 20px;">
+        <table class="table">
+          <thead>
+            <tr>
+              <t t-if="not student_ids or len(student_ids)!=1">
+                <th>Student</th>
+              </t>
+              <t t-if="not class_id">
+                <th>Class</th>
+              </t>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Total Days</th>
+              <th>Reason</th>
+              <th>Admission Number</th>
+              <th>Email</th>
+              <th>Phone Number</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr t-foreach="leaves" t-as="leave">
+              <t t-if="not student_ids or len(student_ids)!=1">
+                <td><span t-esc="leave['student_name']"/></td>
+              </t>
+              <t t-if="not class_id">
+                <td><span t-esc="leave['class_name']"/></td>
+              </t>
+              <td><span t-esc="leave['start_date']"/></td>
+              <td><span t-esc="leave['end_date']"/></td>
+              <td><span t-esc="leave['total_days']"/></td>
+              <td><span t-esc="leave['reason']"/></td>
+              <td><span t-esc="leave['admission_number']"/></td>
+              <td><span t-esc="leave['email']"/></td>
+              <td><span t-esc="leave['phone']"/></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </t>
+  </t>
+</template>
+
+    <template id="student_report">
+    <t t-call="web.html_container">
+      <t t-call="web.external_layout">
+        <h2>Student Report</h2>
+        <p>
+          <strong>Printed Date:</strong>
+          <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </p>
+        <t t-if="department_id and not class_id">
+        <p><strong>Department:</strong> <span t-esc="env['manage.department'].browse(department_id).name"/></p>
+      </t>
+        <t t-if="class_id">
+          <p><strong>Department:</strong> <span t-esc="env['manage.class'].browse(class_id).department_id.name"/></p>
+          <p><strong>Class:</strong> <span t-esc="env['manage.class'].browse(class_id).name"/></p>
+      </t>
+        <div style="margin-bottom: 20px;">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <t t-if="not class_id">
+                  <th>Class Name</th>
+                </t>
+                <t t-if="not (department_id,class_id)">
+                  <th>Department Name</th>
+                </t>
+                <th>Admission Number</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr t-foreach="students" t-as="student">
+                <td><span t-esc="student['student_name']"/></td>
+                <t t-if="not class_id">
+                  <td><span t-esc="student['class_name']"/></td>
+                </t>
+                <t t-if="not (department_id,class_id)">
+                 <td><span t-esc="student['department_name']"/></td>
+                </t>
+                <td><span t-esc="student['admission_number']"/></td>
+                <td><span t-esc="student['email']"/></td>
+                <td><span t-esc="student['phone']"/></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </t>
+    </t>
+  </template>
+
+    <template id="event_report">
+    <t t-call="web.html_container">
+      <t t-call="web.external_layout">
+        <h2>Event Report</h2>
+        <p>
+          <strong>Printed Date:</strong>
+          <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </p>
+        <t t-if="club_id">
+        <p><strong>Club Name:</strong> <span t-esc="env['clubs'].browse(club_id).name"/></p>
+        </t>
+        <t t-if="start_date">
+         <p><strong>Start Date:</strong> <span t-esc="start_date"/></p>
+         <p><strong>End Date:</strong> <span t-esc="end_date"/></p>
+       </t>
+        <div style="margin-bottom: 20px;">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Event Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr t-foreach="events" t-as="event">
+                <td><span t-esc="event['event_name']"/></td>
+                <td><span t-esc="event['start_date']"/></td>
+                <td><span t-esc="event['end_date']"/></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </t>
+    </t>
+  </template>
+
+  <template id="clubs_report">
+  <t t-name="school_management.clubs_report">
+  <t t-call="web.html_container">
+    <t t-call="web.external_layout">
+      <div class="page">
+        <h2>Club Report</h2>
+
+        <p>
+          <strong>Printed Date:</strong>
+          <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </p>
+
+        <t t-if="student_id">
+          <p>
+            <strong>Student Name:</strong>
+            <span t-esc="env['registration'].browse(student_id).first_name"/>
+          </p>
+        </t>
+
+        <t t-if="club_id">
+          <p>
+            <strong>Club Name:</strong>
+            <span t-esc="env['clubs'].browse(club_id).name"/>
+          </p>
+        </t>
+
+        <div style="margin-bottom: 20px;">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <t t-if="not student_id">
+                  <th>Student</th>
+                </t>
+                <t t-if="not club_id">
+                  <th>Club Name</th>
+                </t>
+                <th>Admission Number</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr t-foreach="clubs" t-as="club">
+                <t t-if="not student_id">
+                  <td><span t-esc="club['student_name']"/></td>
+                </t>
+                <t t-if="not club_id">
+                  <td><span t-esc="club['club_name']"/></td>
+                </t>
+                <td><span t-esc="club['admission_number']"/></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </t>
+  </t>
+  </t>
+</template>
+
+  <template id="exam_report">
+  <t t-name="school_management.exam_report">
+  <t t-call="web.html_container">
+    <t t-call="web.external_layout">
+      <div class="page">
+        <h2>Exam Report</h2>
+
+        <p>
+          <strong>Printed Date:</strong>
+          <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </p>
+
+        <t t-if="student_id">
+          <p>
+            <strong>Student Name:</strong>
+            <span t-esc="env['registration'].browse(student_id).first_name"/>
+          </p>
+        </t>
+
+        <t t-if="class_id">
+          <p>
+            <strong>Class Name:</strong>
+            <span t-esc="env['manage.class'].browse(class_id).name"/>
+          </p>
+        </t>
+
+        <t t-if="exam_id">
+          <p>
+            <strong>Exam:</strong>
+            <span t-esc="env['exam'].browse(exam_id).name"/>
+          </p>
+        </t>
+
+        <div style="margin-bottom: 20px;">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <t t-if="not student_id">
+                  <th>Student</th>
+                </t>
+                <t t-if="not class_id">
+                  <th>Class</th>
+                </t>
+                <t t-if="not exam_id">
+                  <th>Exam</th>
+                </t>
+                <th>Admission Number</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr t-foreach="exams" t-as="exam">
+                <t t-if="not student_id">
+                  <td><span t-esc="exam['student_name']"/></td>
+                </t>
+                <t t-if="not class_id">
+                  <td><span t-esc="exam['class_name']"/></td>
+                </t>
+                <t t-if="not exam_id">
+                  <td><span t-esc="exam['exam_name']"/></td>
+                </t>
+                <td><span t-esc="exam['admission_number']"/></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </t>
+  </t>
+  </t>
+</template>
+
+</odoo>
+

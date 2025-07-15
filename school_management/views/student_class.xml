@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+     <record id="view_manage_class_list_inherit_students" model="ir.ui.view">
+        <field name="name">manage.class.list.class</field>
+        <field name="model">manage.class</field>
+        <field name="inherit_id" ref="school_management.view_manage_class_list"/>
+        <field name="priority" eval="20"/>
+        <field name="mode">primary</field>
+    </record>
+
+    <record id="view_manage_class_form_inherit_class" model="ir.ui.view">
+        <field name="name">manage.class.form.class</field>
+        <field name="model">manage.class</field>
+        <field name="inherit_id" ref="school_management.view_manage_class_form"/>
+        <field name="priority" eval="20"/>
+        <field name="mode">primary</field>
+    </record>
+
+    <record id="action_student_class" model="ir.actions.act_window">
+        <field name="name">Class</field>
+        <field name="res_model">manage.class</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'list_view_ref': 'manage_class.view_manage_class_list', 'form_view_ref': 'manage_class.view_manage_class_form', 'create': False}</field>
+    </record>
+
+
+</odoo>

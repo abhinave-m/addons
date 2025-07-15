@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+    <t t-name="grade_field_pos.Orderline" t-inherit="point_of_sale.Orderline" t-inherit-mode="extension">
+        <xpath expr="//ul[contains(@class, 'info-list')]" position="inside">
+            <li t-if="line.product_grade">
+                <div class="inline pt-2">
+                    <span class="badge text-bg-primary">
+                        Grade: <t t-out="line.product_grade"/>
+                    </span>
+                </div>
+            </li>
+        </xpath>
+    </t>
+</templates>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+  <record id="action_leave_report_pdf" model="ir.actions.report">
+    <field name="name">Leave Report</field>
+    <field name="model">leave.report.wizard</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">school_management.leave_report</field>
+    <field name="report_file">school_management.leave_report</field>
+    <field name="binding_model_id" ref="model_leave_report_wizard"/>
+    <field name="binding_type">report</field>
+  </record>
+
+  <record id="action_student_report_pdf" model="ir.actions.report">
+    <field name="name">Student Report</field>
+    <field name="model">student.report.wizard</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">school_management.student_report</field>
+    <field name="report_file">school_management.student_report</field>
+    <field name="binding_model_id" ref="model_student_report_wizard"/>
+    <field name="binding_type">report</field>
+  </record>
+
+  <record id="action_event_report_pdf" model="ir.actions.report">
+    <field name="name">Event Report</field>
+    <field name="model">event.report.wizard</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">school_management.event_report</field>
+    <field name="report_file">school_management.event_report</field>
+    <field name="binding_model_id" ref="model_event_report_wizard"/>
+    <field name="binding_type">report</field>
+  </record>
+
+
+  <record id="action_clubs_report_pdf" model="ir.actions.report">
+    <field name="name">Clubs Report</field>
+    <field name="model">clubs.report.wizard</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">school_management.clubs_report</field>
+    <field name="report_file">school_management.clubs_report</field>
+    <field name="binding_model_id" ref="model_clubs_report_wizard"/>
+    <field name="binding_type">report</field>
+  </record>
+
+  <record id="action_exam_report_pdf" model="ir.actions.report">
+    <field name="name">Exam Report</field>
+    <field name="model">exam.report.wizard</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">school_management.exam_report</field>
+    <field name="report_file">school_management.exam_report</field>
+    <field name="binding_model_id" ref="model_exam_report_wizard"/>
+    <field name="binding_type">report</field>
+  </record>
+</odoo>

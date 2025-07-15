@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <template id="registration_form_template" name="Student Registration Form">
+    <t t-call="website.layout">
+      <div class="oe_structure oe_empty">
+        <section class="s_title parallax s_parallax_is_fixed bg-black-50 pt24 pb24" data-vcss="001" data-snippet="s_title" data-scroll-background-ratio="1">
+          <span class="s_parallax_bg oe_img_bg" style="background-image: url('/web/image/website.s_parallax_default_image'); background-position: 50% 0;"/>
+            <div class="o_we_bg_filter bg-black-50"/>
+            <div class="container">
+              <h2>Student Registration</h2>
+            </div>
+        </section>
+      </div>
+
+      <div class="container py-5">
+        <t t-if="error">
+          <div class="alert alert-danger" role="alert">
+            <t t-esc="error"/>
+          </div>
+        </t>
+        <form action="/school_management/register/submit" method="post" class="row g-3" enctype="multipart/form-data" >
+          <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+            <div class="text-center mb-3">
+                <img id="student_image_preview"
+                     t-att-src="form_data and form_data.get('student_image')
+                                and 'data:image/png;base64,%s' % form_data.get('student_image')
+                                or (student and student.student_image
+                                and 'data:image/png;base64,%s' % student.student_image)
+                                or '/school_management/static/src/img/default_avatar.png'"
+                     class="img-thumbnail"
+                     style="max-width: 150px; max-height: 150px;" />
+                <div class="mt-2">
+                    <label for="student_image">Upload Photo</label>
+                    <input type="file" name="student_image" id="student_image" class="form-control-file"/>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+              <label>First Name *</label>
+              <input type="text" name="first_name" required="required" class="form-control" t-att-value="form_data.get('first_name') if form_data else ''"/>
+            </div>
+
+            <div class="col-md-6">
+              <label>Last Name</label>
+              <input type="text" name="last_name" class="form-control" t-att-value="form_data.get('last_name') if form_data else ''"/>
+            </div>
+
+            <div class="col-md-6">
+              <label>Date of Birth *</label>
+              <input type="date" name="dob" id="dob" required="required" class="form-control"/>
+            </div>
+
+            <div class="col-md-6">
+            <label>Age</label>
+            <input type="text"
+                   id="age"
+                   class="form-control"
+                   readonly="readonly"
+                   t-att-value="form_data.get('age') if form_data else (student.age if student else '')" />
+            <input type="hidden"
+                   name="age"
+                   id="age_hidden"
+                   t-att-value="form_data.get('age') if form_data else (student.age if student else '')" />
+          </div>
+
+            <div class="col-md-6">
+              <label>Email *</label>
+              <input type="email" name="email" required="required" class="form-control" t-att-value="form_data.get('email') if form_data else ''"/>
+            </div>
+
+            <div class="col-md-6">
+            <label for="current_department_id">Department</label>
+                  <select name="current_department" id="current_department_id" required="required" class="form-control">
+                    <option value="">Select Department</option>
+                    <t t-foreach="departments" t-as="dept">
+                      <option t-att-value="dept.id" t-esc="dept.name"/>
+                    </t>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="current_class_id">Class</label>
+                  <select name="current_class" id="current_class_id" class="form-control">
+                    <option value="">Select Class</option>
+                  </select>
+                </div>
+            <div class="col-md-6">
+              <label>Gender</label>
+                <select name="gender" class="form-control" t-att-value="form_data.get('gender') if form_data else ''">
+                  <option value="">-- Select Gender --</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="others">Others</option>
+                </select>
+            </div>
+
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary">Submit Registration</button>
+              <a href="/school_management/register" class="btn btn-secondary">Cancel</a>
+            </div>
+
+        </form>
+      </div>
+    <script type="text/javascript" src="/school_management/static/src/js/image_preview.js"></script>
+    </t>
+  </template>
+
+  <template id="registration_list_template" name="Student Registration List">
+    <t t-call="website.layout">
+      <div class="oe_structure oe_empty">
+        <section class="s_title parallax s_parallax_is_fixed bg-black-50 pt24 pb24" data-vcss="001" data-snippet="s_title" data-scroll-background-ratio="1">
+          <span class="s_parallax_bg oe_img_bg" style="background-image: url('/web/image/website.s_parallax_default_image'); background-position: 50% 0;"/>
+          <div class="o_we_bg_filter bg-black-50"/>
+          <div class="container">
+            <h2>Registered Students</h2>
+          </div>
+        </section>
+      </div>
+      <div class="container mt-4">
+        <a href="/school_management/register/new" class="btn btn-success mb-3">Add Registration</a>
+        <form method="get" action="/school_management/register" class="row g-2 mb-3">
+          <t t-if="error">
+            <div class="alert alert-danger" role="alert">
+                  <t t-esc="error"/>
+            </div>
+          </t>
+
+          <div class="col-md-6">
+            <input type="text" name="search" class="form-control" placeholder="Search..." t-att-value="search or ''"/>
+          </div>
+
+          <div class="col-md-3">
+            <select name="search_in" class="form-select">
+              <t t-foreach="searchbar_inputs.items()" t-as="item">
+                <option t-att-value="item[0]" t-att-selected="item[0] == search_in"><t t-esc="item[1]['label']"/></option>
+              </t>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+          </div>
+        </form>
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Registration Number</th>
+              <th>DOB</th>
+              <th>Age</th>
+              <th>Email</th>
+              <th>Gender</th>
+            </tr>
+          </thead>
+          <tbody>
+            <t t-if="students">
+              <t t-foreach="students" t-as="student">
+                <tr>
+                  <td>
+                    <a t-att-href="'/school_management/register/%s' % student.id">
+                      <t t-esc="student.first_name"/> <t t-esc="student.last_name"/>
+                    </a>
+                  </td>
+                  <td><t t-esc="student.registration_number"/></td>
+                  <td><t t-esc="student.dob"/></td>
+                  <td><t t-esc="student.age"/></td>
+                  <td><t t-esc="student.email"/></td>
+                  <td><t t-esc="student.gender"/></td>
+                </tr>
+              </t>
+            </t>
+            <t t-if="not students">
+              <tr>
+                <td colspan="6" class="text-center text-danger">No students found.</td>
+              </tr>
+            </t>
+          </tbody>
+        </table>
+        <t t-call="website.pager" t-with="{'pager': pager}"/>
+      </div>
+
+    </t>
+  </template>
+
+  <template id="registration_view_template" name="View/Edit Student">
+    <t t-call="website.layout">
+      <div class="oe_structure oe_empty">
+        <section class="s_title parallax s_parallax_is_fixed bg-black-50 pt24 pb24" data-vcss="001" data-snippet="s_title" data-scroll-background-ratio="1">
+          <span class="s_parallax_bg oe_img_bg" style="background-image: url('/web/image/website.s_parallax_default_image'); background-position: 50% 0;"/>
+          <div class="o_we_bg_filter bg-black-50"/>
+          <div class="container">
+            <h2>View/Edit Student Details</h2>
+          </div>
+        </section>
+      </div>
+
+      <div class="container py-5">
+        <t t-if="error">
+          <div class="alert alert-danger" role="alert">
+            <t t-esc="error"/>
+          </div>
+        </t>
+        <form t-att-action="'/school_management/register/%s/edit' % student.id" method="post" class="row g-3" enctype="multipart/form-data">
+          <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+          <div class="text-center mb-3">
+            <t t-if="student.student_image">
+                        <img id="student_image_preview"
+                             t-attf-src="data:image/png;base64,{{student.student_image}}"
+             class="img-thumbnail"
+             style="max-width: 150px; max-height: 150px;" />
+            </t>
+            <t t-else="">
+              <img id="student_image_preview"
+                             t-attf-src="/school_management/static/src/img/default_avatar.png"
+             class="img-thumbnail"
+             style="max-width: 150px; max-height: 150px;" />
+            </t>
+           <div class="mt-2">
+                    <label for="student_image">Upload Photo</label>
+                    <input type="file" name="student_image" id="student_image" class="form-control-file"/>
+                </div>
+          </div>
+          <div class="col-md-6">
+            <label>First Name</label>
+            <input type="text" name="first_name" t-att-value="form_data.get('first_name') if form_data else student.first_name" required="required" class="form-control"/>
+          </div>
+          <div class="col-md-6">
+            <label>Last Name</label>
+            <input type="text" name="last_name" t-att-value="form_data.get('last_name') if form_data else student.last_name" class="form-control"/>
+          </div>
+          <div class="col-md-6">
+            <label>DOB</label>
+            <input type="date" name="dob" id="dob" t-att-value="student.dob" required="required" class="form-control"/>
+          </div>
+          <div class="col-md-6">
+            <label>Age</label>
+            <input type="text"
+                   id="age"
+                   class="form-control"
+                   readonly="readonly"
+                   t-att-value="form_data.get('age') if form_data else (student.age if student else '')" />
+            <input type="hidden"
+                   name="age"
+                   id="age_hidden"
+                   t-att-value="form_data.get('age') if form_data else (student.age if student else '')" />
+          </div>
+          <div class="col-md-6">
+            <label>Email</label>
+            <input type="email" name="email" t-att-value="form_data.get('email') if form_data else student.email" required="required" class="form-control"/>
+          </div>
+          <div class="col-md-6">
+            <label>Current Department</label>
+            <select id="current_department_id" name="current_department" class="form-control">
+              <option value="">-- Select Department --</option>
+              <t t-foreach="departments" t-as="dept">
+                <option t-att-value="dept.id"
+                  t-att-selected="(form_data and int(form_data.get('current_department_id','0')) == dept.id) or (not form_data and dept.id == student.current_department_id.id)">
+                  <t t-esc="dept.name"/>
+                </option>
+              </t>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label>Current Class</label>
+            <select id="current_class_id" name="current_class" class="form-control">
+              <option value="">-- Select Class --</option>
+              <t t-foreach="classes" t-as="cls">
+                <option t-att-value="cls.id"
+                  t-att-selected="(form_data and int(form_data.get('current_class_id','0')) == cls.id) or (not form_data and cls.id == student.current_class_id.id)">
+                  <t t-esc="cls.name"/>
+                </option>
+              </t>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label>Gender</label>
+            <select name="gender" class="form-control">
+              <option value="">-- Select Gender --</option>
+              <option value="male" t-att-selected="student.gender == 'male'">Male</option>
+              <option value="female" t-att-selected="student.gender == 'female'">Female</option>
+              <option value="others" t-att-selected="student.gender == 'others'">Others</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="/school_management/register" class="btn btn-secondary">Back to List</a>
+          </div>
+        </form>
+      </div>
+    <script type="text/javascript" src="/school_management/static/src/js/image_preview.js"></script>
+
+    </t>
+  </template>
+
+  <template id="leave_form_template" name="Leave Form">
+    <t t-call="website.layout">
+      <section class="s_title parallax s_parallax_is_fixed bg-black-50 pt24 pb24" data-vcss="001" data-snippet="s_title" data-scroll-background-ratio="1">
+        <span class="s_parallax_bg oe_img_bg" style="background-image: url('/web/image/website.s_parallax_default_image'); background-position: 50% 0;"></span>
+        <div class="o_we_bg_filter bg-black-50"></div>
+        <div class="container">
+          <h2>View/Edit Leave</h2>
+        </div>
+      </section>
+      <div class="container py-5">
+      <form action="/school_management/leave/submit" method="post" class="row g-3">
+        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+          <div class="form-group">
+            <label for="student_id">Student *</label>
+            <select name="student_id" id="student_id" required="required" class="form-control">
+              <option value="">-- Select Student --</option>
+               <t t-foreach="students" t-as="student">
+                <option t-att-value="student.id"
+                      t-att-selected="form_data and form_data.get('student_id') and int(form_data.get('student_id')) == student.id">
+                  <t t-esc="student.first_name"/> <t t-esc="student.last_name or ''"/>
+                </option>
+               </t>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="class_id">Class</label>
+            <input type="text" name="class_name" id="class_id" class="form-control" readonly="readonly"/>
+          </div>
+
+          <div class="form-group">
+            <label for="start_date">Start Date *</label>
+            <input type="date" name="start_date" id="start_date" required="required" class="form-control"
+                 t-att-value="form_data.get('start_date') if form_data else ''"/>
+          </div>
+
+          <div class="form-group">
+            <label for="end_date">End Date *</label>
+            <input type="date" name="end_date" id="end_date" required="required" class="form-control"
+                  t-att-value="form_data.get('end_date') if form_data else ''"/>
+          </div>
+
+          <div class="form-group form-check">
+            <input type="checkbox" name="half_day" id="half_day" class="form-check-input"
+                 t-att-checked="form_data and form_data.get('half_day')"/>
+            <label for="half_day" class="form-check-label">Half Day</label>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="reason">Reason</label>
+            <textarea name="reason" id="reason" class="form-control"><t t-esc="form_data.get('reason') if form_data else ''"/></textarea>
+          </div>
+
+          <div class="col-md-6">
+            <button type="submit" class="btn btn-primary">Submit Leave</button>
+            <a href="/school_management/leave" class="btn btn-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </t>
+  </template>
+
+  <template id="leave_list_template" name="Student Leave List">
+    <t t-call="website.layout">
+      <section class="s_title parallax s_parallax_is_fixed bg-black-50 pt24 pb24" data-vcss="001" data-snippet="s_title" data-scroll-background-ratio="1">
+        <span class="s_parallax_bg oe_img_bg" style="background-image: url('/web/image/website.s_parallax_default_image'); background-position: 50% 0;"></span>
+        <div class="o_we_bg_filter bg-black-50"></div>
+        <div class="container">
+          <h2>Leave List</h2>
+        </div>
+      </section>
+
+      <div class="container mt-4">
+        <a href="/school_management/leave/new" class="btn btn-success mb-3">Add Leave</a>
+
+        <form method="get" action="/school_management/leave" class="row g-2 mb-3">
+          <t t-if="error">
+            <div class="alert alert-danger" role="alert">
+              <t t-esc="error"/>
+            </div>
+          </t>
+
+          <div class="col-md-6">
+            <input type="text" name="search" class="form-control" placeholder="Search..." t-att-value="search or ''"/>
+          </div>
+
+          <div class="col-md-3">
+            <select name="search_in" class="form-select">
+              <t t-foreach="searchbar_inputs.items()" t-as="item">
+                <option t-att-value="item[0]" t-att-selected="item[0] == search_in">
+                  <t t-esc="item[1]['label']"/>
+                </option>
+              </t>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+          </div>
+        </form>
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Class</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Total Days</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+          <tbody>
+            <t t-if="leaves">
+              <t t-foreach="leaves" t-as="leave">
+                <tr>
+                  <td>
+                    <a t-att-href="'/school_management/leave/%s' % leave.id">
+                      <t t-esc="leave.student_id.first_name"/> <t t-esc="leave.student_id.last_name or ''"/>
+                    </a>
+                  </td>
+                  <td><t t-esc="leave.class_id.name"/></td>
+                  <td><t t-esc="leave.start_date"/></td>
+                  <td><t t-esc="leave.end_date"/></td>
+                  <td><t t-esc="leave.total_days"/></td>
+                  <td><t t-esc="leave.reason"/></td>
+                </tr>
+              </t>
+            </t>
+            <t t-if="not leaves">
+              <tr>
+                <td colspan="6" class="text-center text-danger">No leaves found.</td>
+              </tr>
+            </t>
+          </tbody>
+        </table>
+        <t t-call="website.pager" t-with="{'pager': pager}"/>
+      </div>
+    </t>
+  </template>
+
+  <template id="leave_view_template" name="View/Edit Leave">
+    <t t-call="website.layout">
+      <section class="s_title parallax s_parallax_is_fixed bg-black-50 pt24 pb24" data-vcss="001" data-snippet="s_title" data-scroll-background-ratio="1">
+        <span class="s_parallax_bg oe_img_bg" style="background-image: url('/web/image/website.s_parallax_default_image'); background-position: 50% 0;"></span>
+        <div class="o_we_bg_filter bg-black-50"></div>
+        <div class="container">
+          <h2>View/Edit Leave</h2>
+        </div>
+      </section>
+
+      <div class="container py-5">
+        <t t-if="error">
+          <div class="alert alert-danger" role="alert">
+            <t t-esc="error"/>
+          </div>
+        </t>
+
+      <form t-att-action="'/school_management/leave/%s/edit' % leave.id" method="post" class="form">
+        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+          <div class="col-md-6">
+            <label>Student</label>
+            <input type="text" name="student_id" t-att-value="form_data.get('student_id.first_name') if form_data else leave.student_id.first_name" readonly="1" class="form-control"/>
+          </div>
+
+          <div class="col-md-6">
+            <label>Class</label>
+              <input type="text" name="class_id" t-att-value="form_data.get('class_id.name') if form_data else leave.class_id.name" readonly="1" class="form-control"/>
+          </div>
+
+          <div class="form-group">
+            <label for="start_date">Start Date *</label>
+            <input type="date" name="start_date" required="required" class="form-control"
+                 t-att-value="form_data.get('start_date') if form_data else leave.start_date"/>
+          </div>
+
+          <div class="form-group">
+            <label for="end_date">End Date *</label>
+            <input type="date" name="end_date" required="required" class="form-control"
+                 t-att-value="form_data.get('end_date') if form_data else leave.end_date"/>
+          </div>
+
+          <div class="form-group form-check">
+            <input type="checkbox" name="half_day" id="half_day" class="form-check-input"
+                 t-att-checked="(form_data and form_data.get('half_day')) or (not form_data and leave.half_day)"/>
+            <label for="half_day" class="form-check-label">Half Day</label>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="reason">Reason</label>
+            <textarea name="reason" class="form-control"><t t-esc="form_data.get('reason') if form_data else leave.reason"/>
+            </textarea>
+          </div>
+
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="/school_management/leave" class="btn btn-secondary">Back to List</a>
+          </div>
+      </form>
+      </div>
+    </t>
+  </template>
+
+  <template id="event_list_template" name="Event List">
+  <t t-call="website.layout">
+    <section class="s_title parallax s_parallax_is_fixed bg-black-50 pt24 pb24" data-vcss="001" data-snippet="s_title" data-scroll-background-ratio="1">
+      <span class="s_parallax_bg oe_img_bg" style="background-image: url('/web/image/website.s_parallax_default_image'); background-position: 50% 0;"></span>
+      <div class="o_we_bg_filter bg-black-50"></div>
+      <div class="container">
+        <h2>Event List</h2>
+      </div>
+    </section>
+
+    <div class="container mt-4">
+      <a href="/school_management/events/new" class="btn btn-success mb-3">Add Event</a>
+
+      <form method="get" action="/school_management/events" class="row g-2 mb-3">
+        <t t-if="error">
+          <div class="alert alert-danger" role="alert">
+            <t t-esc="error"/>
+          </div>
+        </t>
+
+        <div class="col-md-6">
+          <input type="text" name="search" class="form-control" placeholder="Search..." t-att-value="search or ''"/>
+        </div>
+
+        <div class="col-md-3">
+          <select name="search_in" class="form-select">
+            <t t-foreach="searchbar_inputs.items()" t-as="item">
+              <option t-att-value="item[0]" t-att-selected="item[0] == search_in">
+                <t t-esc="item[1]['label']"/>
+              </option>
+            </t>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+      </form>
+
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Club</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <t t-if="events">
+            <t t-foreach="events" t-as="event">
+              <tr>
+                <td><a t-att-href="'/school_management/events/%s' % event.id"><t t-esc="event.name"/></a></td>
+                <td><t t-esc="event.club_id.name or '-'"/></td>
+                <td><t t-esc="event.start_date"/></td>
+                <td><t t-esc="event.end_date"/></td>
+                <td><t t-esc="event.status"/></td>
+              </tr>
+            </t>
+          </t>
+          <t t-if="not events">
+            <tr>
+              <td colspan="5" class="text-center text-danger">No events found.</td>
+            </tr>
+          </t>
+        </tbody>
+      </table>
+      <t t-call="website.pager" t-with="{'pager': pager}"/>
+    </div>
+  </t>
+</template>
+
+
+  <template id="event_form_template" name="Event Form">
+    <t t-call="website.layout">
+      <div class="oe_structure oe_empty">
+        <section class="s_title parallax s_parallax_is_fixed bg-black-50 pt24 pb24" data-vcss="001" data-snippet="s_title" data-scroll-background-ratio="1">
+        <span class="s_parallax_bg oe_img_bg" style="background-image: url('/web/image/website.s_parallax_default_image'); background-position: 50% 0;"></span>
+        <div class="o_we_bg_filter bg-black-50"></div>
+        <div class="container">
+          <h2>View/Edit Event</h2>
+        </div>
+        </section>
+      </div>
+      <div class="container py-5">
+        <form action="/school_management/events/submit" method="post" class="oe_website_form">
+          <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+          <input type="hidden" name="event_id" t-att-value="event.id if event else 0"/>
+          <div class="form-group mb-3">
+            <label for="name">Event Name</label>
+            <input type="text" name="name" class="form-control"
+                   t-att-value="event.name if event else ''" required="required"/>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="club_id">Club</label>
+            <select name="club_id" class="form-control">
+              <t t-foreach="request.env['clubs'].sudo().search([])" t-as="club">
+                <option t-att-value="club.id"
+                        t-att-selected="event.club_id.id == club.id if event else False">
+                  <t t-esc="club.name"/>
+                </option>
+              </t>
+            </select>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="start_date">Start Date and Time</label>
+            <input type="datetime-local" name="start_date" class="form-control"
+                   t-att-value="event.start_date.strftime('%Y-%m-%dT%H:%M') if event and event.start_date else ''"/>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="end_date">End Date and Time</label>
+            <input type="datetime-local" name="end_date" class="form-control"
+                   t-att-value="event.end_date.strftime('%Y-%m-%dT%H:%M') if event and event.end_date else ''"/>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="desc">Description</label>
+            <textarea name="desc" class="form-control"><t t-esc="event.desc if event else ''"/></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Event</button>
+          <a href="/school_management/events" class="btn btn-secondary">Cancel</a>
+        </form>
+      </div>
+    </t>
+  </template>
+
+  <template id="thank_you_template" name="Thank You Page">
+    <t t-call="website.layout">
+      <div class="container mt-5 text-center">
+        <h2>Thank You!</h2>
+        <p>Your submission has been received successfully.</p>
+        <a href="/" class="btn btn-primary">Back to Home</a>
+      </div>
+    </t>
+  </template>
+</odoo>

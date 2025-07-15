@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="pos_clear_button.ControlButtons" t-inherit="point_of_sale.ControlButtons" t-inherit-mode="extension">
+        <xpath expr="//OrderlineNoteButton" position="after">
+             <button class="btn btn-danger" t-on-click="() => this.onClickClear()">Clear All</button>
+        </xpath>
+    </t>
+
+    <t t-name="pos_clear_button.Orderline" t-inherit="point_of_sale.Orderline" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('product-price')]" position="inside">
+             <i t-on-click="() => this.onClickClearLine()" style="margin-left:8px" class="btn btn-danger fa fa-times"/>
+        </xpath>
+    </t>
+</templates>

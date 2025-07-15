@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="product_product_form_inherit_grade_field_product" model="ir.ui.view">
+        <field name="name">product.product.form.inherit.grade.field.product</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="product_grade"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

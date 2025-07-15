@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_product_fetch_wizard" model="ir.actions.act_window">
+        <field name="name">Product Fetch</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.fetch.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        id="menu_product_fetch_wizard"
+        name="Product Fetch"
+        parent="stock.menu_stock_inventory_control"
+        action="action_product_fetch_wizard"
+        sequence="3"
+    />
+</odoo>

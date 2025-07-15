@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_manage_academic_year_list" model="ir.ui.view">
+        <field name="name">manage_academic_year_list</field>
+        <field name="model">manage.academic.year</field>
+        <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_manage_academic_year" model="ir.actions.act_window">
+            <field name="name">Manage Academic Year</field>
+            <field name="res_model">manage.academic.year</field>
+            <field name="view_mode">list</field>
+    </record>
+</odoo>
