@@ -1,47 +1,43 @@
-from odoo import api, models, fields
-import logging
-_logger = logging.getLogger(__name__)
-
+#-*- coding: utf-8 -*-
+from odoo import models, fields
 
 
 class SurveyUserInput(models.Model):
+    """Extends survey input to link or create a contact."""
     _inherit = 'survey.user_input'
 
     contact_creation_id = fields.Many2one('res.partner', string="Created Contact")
 
-
-class SurveyUserInputLine(models.Model):
-    _inherit = 'survey.user_input.line'
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        """Creating a contact from input lines"""
-        for vals in vals_list:
-            _logger.info("Creating input line with vals: %s", vals)
-            user_input = self.env['survey.user_input'].browse(vals.get('user_input_id'))
+    def _mark_done(self):
+        """Process survey answers to create or link a partner contact."""
+        for user_input in self:
             survey = user_input.survey_id
-            contact = user_input.contact_creation_id
-            question_id = vals.get('question_id')
-            answer_type = vals.get('answer_type')
-            answer_field = f'value_{answer_type}'
-            answer = vals.get(answer_field)
-
-            if not survey or not survey.contact_mapping_ids:
+            if not survey.contact_mapping_ids:
                 continue
 
-            for mapping in survey.contact_mapping_ids:
-                if mapping.question_id.id == question_id:
-                    field_name = mapping.contact_field
-                    _logger.info("Mapping question %s to partner field %s with value %s",
-                                 question_id, field_name, answer)
+            data = {}
+            for line in user_input.user_input_line_ids:
+                answer_type = line.answer_type
+                answer_field = f'value_{answer_type}' if answer_type else None
+                answer = getattr(line, answer_field, None) if answer_field else None
 
-                    if not contact:
-                        contact = self.env['res.partner'].create({
-                            field_name: answer,
-                            'name': answer if field_name == 'name' else 'Survey User'
-                        })
-                        user_input.contact_creation_id = contact.id
-                    else:
-                        contact.write({field_name: answer})
+                for mapping in survey.contact_mapping_ids:
+                    if mapping.question_id == line.question_id and answer:
+                        data[mapping.contact_field] = answer
 
-        return super(SurveyUserInputLine, self).create(vals_list)
+            if not data:
+                continue
+
+            email_value = data.get('email')
+            if email_value:
+                existing_contact = self.env['res.partner'].search([('email', '=', email_value)], limit=1)
+                if existing_contact:
+                    user_input.contact_creation_id = existing_contact.id
+                    continue
+
+            contact = self.env['res.partner'].create({
+                **data,
+                'name': data.get('name', 'Survey User'),
+            })
+            user_input.contact_creation_id = contact.id
+        return super(SurveyUserInput, self)._mark_done()

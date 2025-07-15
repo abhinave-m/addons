@@ -1,6 +1,9 @@
+#-*- coding: utf-8 -*-
 from odoo import models, fields
 
+
 class SurveyContactMapping(models.Model):
+    """Maps survey questions to partner contact fields."""
     _name = 'survey.contact.mapping'
     _description = 'Survey Contact Mapping'
 
@@ -22,10 +25,7 @@ class SurveyContactMapping(models.Model):
     )
 
 class SurveySurvey(models.Model):
+    """Extends survey to hold contact field mappings."""
     _inherit = 'survey.survey'
 
-    contact_mapping_ids = fields.One2many(
-        'survey.contact.mapping',
-        'survey_id',
-        string='Contact Mappings'
-    )
+    contact_mapping_ids = fields.One2many('survey.contact.mapping','survey_id',string='Contact Mappings')
