@@ -23,12 +23,7 @@ class SurveyUserInput(models.Model):
 
                 for mapping in survey.contact_mapping_ids:
                     if mapping.question_id == line.question_id and answer:
-                        if mapping.contact_field == 'country_id':
-                            country = self.env['res.country'].search([('name', '=', answer)], limit=1)
-                            if country:
-                                data['country_id'] = country.id
-                        else:
-                            data[mapping.contact_field] = answer
+                        data[mapping.contact_field_id.name] = answer
 
             if not data:
                 continue
