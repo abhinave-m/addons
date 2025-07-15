@@ -13,7 +13,6 @@ class SurveyContactMapping(models.Model):
         [
             ('name', 'Name'),
             ('email', 'Email'),
-            ('phone', 'Phone'),
             ('mobile', 'Mobile'),
             ('street', 'Street'),
             ('city', 'City'),
