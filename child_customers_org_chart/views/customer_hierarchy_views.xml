@@ -8,18 +8,20 @@
                 <field name="name"/>
                 <field name="function"/>
                 <templates>
-                        <t t-name="hierarchy-box">
+                    <t t-name="hierarchy-box">
+                        <a t-att-href="'/web#id=' + (record.id.value + '') + '&amp;model=res.partner&amp;view_type=form'" style="text-decoration: none;">
                             <div t-attf-class="o_hierarchy_node_header d-flex justify-content-center pb-4">
                                 <field name="image_128" preview_image="image_128" options="{'zoom': true, 'zoom_delay': 100}" widget="background_image" />
                             </div>
-                        <div class="o_hierarchy_node_body d-flex flex-column text-center">
-                            <div class="fw-bold">
-                                <field name="name"/>
+                            <div class="o_hierarchy_node_body d-flex flex-column text-center">
+                                <div class="fw-bold">
+                                    <field name="name"/>
+                                </div>
+                                <small>
+                                    <field name="function"/>
+                                </small>
                             </div>
-                            <small>
-                                <field name="function"/>
-                            </small>
-                        </div>
+                        </a>
                     </t>
                 </templates>
             </hierarchy>
