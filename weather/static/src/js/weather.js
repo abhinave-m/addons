@@ -2,6 +2,8 @@
 import { registry } from "@web/core/registry";
 import { Component, useState, onMounted, useRef, onWillUnmount } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
+import { rpc } from "@web/core/network/rpc";
+
 
 export class SystrayWeather extends Component {
     setup() {
@@ -39,6 +41,41 @@ export class SystrayWeather extends Component {
         onWillUnmount(() => {
             document.removeEventListener("click", this.onClickOutside);
         });
+    }
+    async getWeatherFromGeolocation() {
+    if (!navigator.geolocation) {
+        this.state.weatherError = "Geolocation is not supported by your browser.";
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        async (position) => {
+            const coords = [position.coords.latitude, position.coords.longitude];
+            console.log(coords)
+            try {
+                const result = await rpc("/web/dataset/call_kw", {
+                    model: "res.config.settings",
+                    method: "get_weather_by_coords",
+                    args: [coords],
+                    kwargs: {},
+                });
+
+                if (result.error) {
+                    this.state.weatherError = result.error;
+                    this.state.weatherData = {};
+                } else {
+                    this.state.weatherData = result;
+                    this.state.weatherError = "";
+                }
+            } catch (err) {
+                this.state.weatherError = "Failed to fetch weather by coordinates.";
+                this.state.weatherData = {};
+            }
+        },
+        (error) => {
+            this.state.weatherError = "Unable to retrieve your location.";
+        }
+    );
     }
 
     async toggleDropdown(ev) {

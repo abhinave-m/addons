@@ -1,8 +1,10 @@
+#-*- coding: utf-8 -*-
 from odoo import api, fields, models
 import requests
 
 
 class ResConfigSettings(models.TransientModel):
+    """Inherits the res.configure.settings to enable/disable the OpenWeatherMap """
     _inherit = 'res.config.settings'
 
     enable_weather = fields.Boolean(string="OpenWeather API",config_parameter="weather.enable_weather")
@@ -11,6 +13,7 @@ class ResConfigSettings(models.TransientModel):
 
     @api.model
     def get_weather_from_settings(self):
+        """Returns the response based on the API and location provided"""
         enable = self.env["ir.config_parameter"].sudo().get_param("weather.enable_weather")
         if not enable or enable in ["False", False]:
             return {"error": "Weather is disabled in settings."}
@@ -35,5 +38,26 @@ class ResConfigSettings(models.TransientModel):
                 return {"error": f"Invalid API key : '{api_key}' provided."}
             else:
                 return {"error": str(e)}
+
+    @api.model
+    def get_weather_by_coords(self, coords):
+        """Returns the response based on the co-ordinates fetched by navigator.geolocation"""
+        enable = self.env["ir.config_parameter"].sudo().get_param("weather.enable_weather")
+        if not enable or enable in ["False", False]:
+            return {"error": "Weather is disabled in settings."}
+
+        api_key = self.env["ir.config_parameter"].sudo().get_param("weather.api_key")
+        if not api_key:
+            return {"error": "API key not configured."}
+
+        try:
+            lat, lon = coords
+            url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=metric"
+            response = requests.get(url)
+            response.raise_for_status()
+            return response.json()
+        except Exception as e:
+            return {"error": str(e)}
+
 
    
