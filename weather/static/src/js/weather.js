@@ -32,6 +32,7 @@ export class SystrayWeather extends Component {
             );
             if (!(enabled === true || enabled === "True")) {
                 registry.category("systray").remove("SystrayWeather");
+
             }
         });
 
@@ -65,7 +66,7 @@ SystrayWeather.template = "systray_weather_dropdown";
 
 export const systrayItem = {
     Component: SystrayWeather,
-    isDisplayed: () => true, // Always render; we'll hide manually via onMounted
+    isDisplayed: () => true,
 };
 
 registry.category("systray").add("SystrayWeather", systrayItem, { sequence: 10 });
