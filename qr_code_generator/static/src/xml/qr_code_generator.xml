@@ -5,7 +5,7 @@
       <div class="o_systray_item dropdown ">
         <div class="o_systray_icon" title="QR Generator" t-on-click="toggleDropdown">
           <i class="fa fa-qrcode"
-             style="color: white; margin-bottom:10px; padding:13px; font-size: 20px"/>
+             style="color: white; margin-bottom:10px; padding:13px; font-size: 20px; cursor: pointer;"/>
         </div>
 
         <div class="dropdown-menu dropdown-menu-end show"

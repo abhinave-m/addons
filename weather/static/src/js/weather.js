@@ -1,8 +1,7 @@
 /** @odoo-module **/
 import { registry } from "@web/core/registry";
-import { Component, useState, onWillStart, useRef, onMounted, onWillUnmount } from "@odoo/owl";
+import { Component, useState, onMounted, useRef, onWillUnmount } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
-
 
 export class SystrayWeather extends Component {
     setup() {
@@ -23,8 +22,17 @@ export class SystrayWeather extends Component {
             }
         };
 
-        onMounted(() => {
+        onMounted(async () => {
             document.addEventListener("click", this.onClickOutside);
+
+            const enabled = await this.orm.call(
+                "ir.config_parameter",
+                "get_param",
+                ["weather.enable_weather"]
+            );
+            if (!(enabled === true || enabled === "True")) {
+                registry.category("systray").remove("SystrayWeather");
+            }
         });
 
         onWillUnmount(() => {
@@ -51,22 +59,13 @@ export class SystrayWeather extends Component {
             }
         }
     }
-
 }
 
 SystrayWeather.template = "systray_weather_dropdown";
 
 export const systrayItem = {
     Component: SystrayWeather,
-    async isDisplayed(env) {
-        const enabled = await env.services.orm.call(
-            "ir.config_parameter",
-            "get_param",
-            ["weather.enable_weather"]
-        );
-        return enabled === true || enabled === "True";
-    },
+    isDisplayed: () => true, // Always render; we'll hide manually via onMounted
 };
 
 registry.category("systray").add("SystrayWeather", systrayItem, { sequence: 10 });
-
