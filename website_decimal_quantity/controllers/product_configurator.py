@@ -7,8 +7,7 @@ class WebsiteSaleDecimal(WebsiteSaleProductConfiguratorController):
     """Extends the ProductConfigurator controller to handle decimal quantities"""
 
     @route()
-    def website_sale_product_configurator_update_cart(
-            self, main_product, optional_products, **kwargs):
+    def website_sale_product_configurator_update_cart(self, main_product, optional_products, **kwargs):
         """Handles float quantity and optional products from the configurator modal."""
         order = request.website.sale_get_order(force_create=True)
         if order.state != 'draft':
