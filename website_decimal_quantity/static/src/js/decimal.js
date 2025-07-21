@@ -1,5 +1,4 @@
 /** @odoo-module **/
-
 import publicWidget from "@web/legacy/js/public/public_widget";
 import wSaleUtils from "@website_sale/js/website_sale_utils";
 import { rpc } from "@web/core/network/rpc";
@@ -53,8 +52,7 @@ publicWidget.registry.WebsiteSale.include({
             $('.js_quantity[data-line-id='+line_id+']').val(data.quantity).text(data.quantity);
 
             wSaleUtils.updateCartNavBar(data);
-            wSaleUtils.showWarning(data.notification_info.warning);
-            Component.env.bus.trigger('cart_amount_changed', [data.amount, data.minor_amount]);
+            Component.env.bus.trigger('cart_amount_changed', [data.amount]);
         });
     },
     _onChangeCartQuantity: function (ev) {

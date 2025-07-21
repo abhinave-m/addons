@@ -1,1 +1,1 @@
-from . import cart
+from . import cart, product_configurator
