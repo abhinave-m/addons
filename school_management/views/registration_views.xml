@@ -18,8 +18,8 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="enrol" invisible="status != 'draft'" type="object" string="ENROL" class="btn-primary"/>
-                    <button name="action_draft" invisible="status != 'enroled'" type="object" string="Set to Draft"/>
+                    <button name="enroll" invisible="status != 'draft'" type="object" string="ENROLL" class="btn-primary"/>
+                    <button name="action_draft" invisible="status != 'enrolled'" type="object" string="Set to Draft"/>
                     <field name="status" widget="statusbar"/>
                 </header>
                 <sheet>

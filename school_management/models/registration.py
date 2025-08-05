@@ -49,7 +49,7 @@ class Registration(models.Model):
     registration_date = fields.Date()
     tc = fields.Char(string="TC")
     aadhar_number = fields.Char()
-    status = fields.Selection([('draft','Draft'),('enroled','Enroled')],default='draft')
+    status = fields.Selection([('draft','Draft'),('enrolled','Enrolled')],default='draft')
 
     exam_ids = fields.Many2many('exam', string="Exams")
     current_class_id = fields.Many2one('manage.class', string="Current Class")
@@ -59,7 +59,7 @@ class Registration(models.Model):
 
     def action_draft(self):
         """Action for set to draft button"""
-        registration = self.filtered(lambda s: s.status in ['enroled'])
+        registration = self.filtered(lambda s: s.status in ['enrolled'])
         return registration.write({
             'status': 'draft'
              })
@@ -101,12 +101,12 @@ class Registration(models.Model):
             if not (5 <= rec.age <= 15):
                 raise ValidationError("Age should be in between 5 and 15")
 
-    def enrol(self):
+    def enroll(self):
         """Changes the status to Registered and creates user and partner"""
         for record in self:
             if record.admission_number == 'nil':
                 record.admission_number = self.env['ir.sequence'].next_by_code('admission')
-                record.status = "enroled"
+                record.status = "enrolled"
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -120,7 +120,7 @@ class Registration(models.Model):
     def _update_daily_attendance(self):
         """Checks if leave is added for a student daily and marks their attendance"""
         today = date.today()
-        students = self.search([('status','=','enroled')])
+        students = self.search([('status','=','enrolled')])
 
         for student in students:
             leave_exists = self.env['leave'].search_count([('student_id', '=', student.id),('start_date', '<=', today),('end_date', '>=', today)]) > 0

@@ -10,7 +10,7 @@ class Leave(models.Model):
     _inherit = ['mail.thread']
     _rec_name = "student_id"
 
-    student_id = fields.Many2one("registration","Student",required=True,domain="[('status','=','enroled')]")
+    student_id = fields.Many2one("registration","Student",required=True,domain="[('status','=','enrolled')]")
     class_id = fields.Many2one("manage.class","Class",related='student_id.current_class_id',store=True)
     start_date = fields.Date()
     end_date = fields.Date()
